@@ -1,0 +1,16 @@
+{
+  "id": "_template",
+  "floor": 1,
+  "title": "New Level Title",
+  "learning_objective": "What the player should learn in one sentence.",
+  "story_text": "Short story text when the tech arrives at the panel.",
+  "devices": [],
+  "allowed_parts": [],
+  "correct_connections": [],
+  "required_eol": [],
+  "common_mistakes": [
+    {"connection_pattern": "example_wrong", "explanation": "Plain English why this fails."}
+  ],
+  "hints": ["Tip 1", "Tip 2"],
+  "reward_credits": 10
+}

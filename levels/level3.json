@@ -1,0 +1,28 @@
+{
+  "id": "level3",
+  "floor": 1,
+  "title": "Seal-In Circuit",
+  "learning_objective": "START (NO) starts the coil. The relay's own NO contact holds it after START is released. STOP (NC) breaks the circuit.",
+  "story_text": "Make a seal-in so the lamp stays on after you let go of START.",
+  "devices": [
+    {"type": "pb_no", "x": 60, "y": 80, "id": "start"},
+    {"type": "pb_nc", "x": 60, "y": 180, "id": "stop"},
+    {"type": "relay", "x": 180, "y": 120, "id": "r1"},
+    {"type": "lamp", "x": 300, "y": 120, "id": "l1"}
+  ],
+  "allowed_parts": ["pb_no", "pb_nc", "relay", "lamp"],
+  "correct_connections": [
+    {"from": "24v", "to": "stop.1"},
+    {"from": "stop.2", "to": "start.1"},
+    {"from": "start.2", "to": "r1.A1"},
+    {"from": "r1.NO", "to": "start.2"},
+    {"from": "r1.A2", "to": "gnd"},
+    {"from": "r1.COM", "to": "24v"},
+    {"from": "r1.NO", "to": "l1.+"},
+    {"from": "l1.-", "to": "gnd"}
+  ],
+  "required_eol": [],
+  "common_mistakes": [],
+  "hints": ["Put the relay's own NO in parallel with the START button."],
+  "reward_credits": 20
+}

@@ -1,0 +1,7 @@
+{
+  "id": "open_wire",
+  "name": "Open Wire",
+  "how_to_apply": "Remove one required connection in the level JSON for the mission.",
+  "meter_readings": "Infinite ohms across the open pair; 0 V where voltage should be.",
+  "explanation": "An open wire breaks the path. On a supervised circuit this reports TROUBLE."
+}

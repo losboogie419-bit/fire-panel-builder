@@ -1,0 +1,18 @@
+{
+  "id": "level1",
+  "floor": 1,
+  "title": "Relay Anatomy",
+  "learning_objective": "Identify coil A1/A2, COM, NO, and NC terminals. NO is open until coil is energized.",
+  "story_text": "Your first job: label the terminals on this relay so the next tech knows what's what.",
+  "devices": [
+    {"type": "relay", "x": 150, "y": 200, "id": "r1"}
+  ],
+  "allowed_parts": ["relay"],
+  "correct_connections": [],
+  "required_eol": [],
+  "common_mistakes": [
+    {"connection_pattern": "lamp_on_nc", "explanation": "The lamp is on NC, so it is lit when the relay is OFF."}
+  ],
+  "hints": ["A1 and A2 are the coil. COM is the common moving contact."],
+  "reward_credits": 10
+}

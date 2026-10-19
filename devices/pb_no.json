@@ -1,0 +1,12 @@
+{
+  "id": "pb_no",
+  "name": "Pushbutton (NO)",
+  "category": "INPUT",
+  "terminals": [
+    {"id": "1", "label": "1", "polarity": null, "function": "contact"},
+    {"id": "2", "label": "2", "polarity": null, "function": "contact"}
+  ],
+  "behavior": "momentary_no",
+  "generic": true,
+  "source": "generic (game)"
+}

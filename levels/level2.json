@@ -1,0 +1,27 @@
+{
+  "id": "level2",
+  "floor": 1,
+  "title": "Basic Relay Control",
+  "learning_objective": "Pushbutton energizes the coil (24VDC). Relay NO contact switches the lamp on.",
+  "story_text": "Wire a pushbutton to turn on the lamp through the relay's NO contact.",
+  "devices": [
+    {"type": "pb_no", "x": 80, "y": 100, "id": "pb1"},
+    {"type": "relay", "x": 180, "y": 150, "id": "r1"},
+    {"type": "lamp", "x": 280, "y": 100, "id": "l1"}
+  ],
+  "allowed_parts": ["pb_no", "relay", "lamp"],
+  "correct_connections": [
+    {"from": "pb1.1", "to": "r1.A1"},
+    {"from": "r1.A2", "to": "gnd"},
+    {"from": "24v", "to": "pb1.2"},
+    {"from": "r1.COM", "to": "24v"},
+    {"from": "r1.NO", "to": "l1.+"},
+    {"from": "l1.-", "to": "gnd"}
+  ],
+  "required_eol": [],
+  "common_mistakes": [
+    {"connection_pattern": "lamp_on_nc", "explanation": "The lamp is on NC, so it is lit when the relay is OFF."}
+  ],
+  "hints": ["NO means Normally Open — closed only when the coil is powered."],
+  "reward_credits": 15
+}

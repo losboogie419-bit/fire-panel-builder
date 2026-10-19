@@ -1,0 +1,15 @@
+{
+  "id": "relay",
+  "name": "Form C Relay",
+  "category": "RELAY",
+  "terminals": [
+    {"id": "A1", "label": "A1 (coil +)", "polarity": "+", "function": "coil"},
+    {"id": "A2", "label": "A2 (coil -)", "polarity": "-", "function": "coil"},
+    {"id": "COM", "label": "COM", "polarity": null, "function": "contact_common"},
+    {"id": "NO", "label": "NO", "polarity": null, "function": "contact_no"},
+    {"id": "NC", "label": "NC", "polarity": null, "function": "contact_nc"}
+  ],
+  "behavior": "relay",
+  "generic": true,
+  "source": "generic (game)"
+}

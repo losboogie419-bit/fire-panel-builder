@@ -1,0 +1,12 @@
+{
+  "id": "lamp",
+  "name": "Indicator Lamp",
+  "category": "OUTPUT",
+  "terminals": [
+    {"id": "+", "label": "+", "polarity": "+", "function": "load"},
+    {"id": "-", "label": "-", "polarity": "-", "function": "load"}
+  ],
+  "behavior": "lamp",
+  "generic": true,
+  "source": "generic (game)"
+}

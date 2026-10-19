@@ -1,0 +1,9 @@
+{
+  "name": "Fire Panel Builder",
+  "short_name": "FirePanel",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#140A26",
+  "theme_color": "#24143F",
+  "icons": []
+}

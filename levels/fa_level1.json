@@ -1,0 +1,24 @@
+{
+  "id": "fa_level1",
+  "floor": 3,
+  "title": "Pull Station + EOL",
+  "learning_objective": "A pull station on a monitor module circuit shows NORMAL with EOL, TROUBLE if open, ALARM when pulled.",
+  "story_text": "Wire the pull station with the correct EOL so the panel supervises the circuit.",
+  "devices": [
+    {"type": "monitor_module", "x": 150, "y": 150, "id": "mm1"},
+    {"type": "pull_station", "x": 280, "y": 100, "id": "ps1"},
+    {"type": "eol", "x": 320, "y": 200, "id": "eol1"}
+  ],
+  "allowed_parts": ["monitor_module", "pull_station", "eol"],
+  "correct_connections": [
+    {"from": "mm1.IN+", "to": "ps1.1"},
+    {"from": "ps1.2", "to": "eol1.1"},
+    {"from": "eol1.2", "to": "mm1.IN-"}
+  ],
+  "required_eol": [{"circuit": "mm1.input", "value": 47000}],
+  "common_mistakes": [
+    {"connection_pattern": "no_eol", "explanation": "Missing EOL — panel sees OPEN and reports TROUBLE."}
+  ],
+  "hints": ["EOL goes at the LAST device on the Class B circuit."],
+  "reward_credits": 25
+}

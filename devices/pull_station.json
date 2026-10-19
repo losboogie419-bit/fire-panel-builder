@@ -1,0 +1,12 @@
+{
+  "id": "pull_station",
+  "name": "Pull Station",
+  "category": "INPUT",
+  "terminals": [
+    {"id": "1", "label": "1 (NO)", "polarity": null, "function": "contact"},
+    {"id": "2", "label": "2 (NO)", "polarity": null, "function": "contact"}
+  ],
+  "behavior": "pull_no",
+  "generic": true,
+  "source": "generic (game)"
+}

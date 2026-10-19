@@ -1,0 +1,15 @@
+{
+  "id": "monitor_module",
+  "name": "Monitor Module (generic)",
+  "category": "MODULE",
+  "terminals": [
+    {"id": "SLC-", "label": "SLC -", "polarity": "-", "function": "slc"},
+    {"id": "SLC+", "label": "SLC +", "polarity": "+", "function": "slc"},
+    {"id": "IN+", "label": "IN +", "polarity": "+", "function": "input"},
+    {"id": "IN-", "label": "IN -", "polarity": "-", "function": "input"}
+  ],
+  "behavior": "monitor",
+  "eol_value": 47000,
+  "generic": true,
+  "source": "generic (game) - inspired by Notifier FMM-1 concepts"
+}
