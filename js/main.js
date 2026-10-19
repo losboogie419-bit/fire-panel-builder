@@ -1,17 +1,90 @@
-// main.js - stress + title support
+// main.js - levels embedded so preview links work
 let currentLevel = null;
 let levels = [];
 
-async function loadLevels() {
-  const levelFiles = ['level1.json', 'level2.json', 'level3.json', 'fa_level1.json'];
-  for (const f of levelFiles) {
-    try {
-      const res = await fetch(`levels/${f}`);
-      if (res.ok) levels.push(await res.json());
-    } catch (e) {
-      console.warn('Could not load', f);
+function loadLevels() {
+  levels = [
+    {
+      "id": "level1",
+      "floor": 1,
+      "title": "Relay Anatomy",
+      "learning_objective": "Identify coil A1/A2, COM, NO, and NC terminals. NO is open until coil is energized.",
+      "devices": [
+        {"type": "relay", "x": 150, "y": 200, "id": "r1"}
+      ],
+      "correct_connections": [],
+      "common_mistakes": [
+        {"connection_pattern": "lamp_on_nc", "explanation": "The lamp is on NC, so it is lit when the relay is OFF."}
+      ],
+      "reward_credits": 10
+    },
+    {
+      "id": "level2",
+      "floor": 1,
+      "title": "Basic Relay Control",
+      "learning_objective": "Pushbutton energizes the coil (24VDC). Relay NO contact switches the lamp on.",
+      "devices": [
+        {"type": "pb_no", "x": 80, "y": 100, "id": "pb1"},
+        {"type": "relay", "x": 180, "y": 150, "id": "r1"},
+        {"type": "lamp", "x": 280, "y": 100, "id": "l1"}
+      ],
+      "correct_connections": [
+        {"from": "pb1.1", "to": "r1.A1"},
+        {"from": "r1.A2", "to": "gnd"},
+        {"from": "24v", "to": "pb1.2"},
+        {"from": "r1.COM", "to": "24v"},
+        {"from": "r1.NO", "to": "l1.+"},
+        {"from": "l1.-", "to": "gnd"}
+      ],
+      "common_mistakes": [
+        {"connection_pattern": "lamp_on_nc", "explanation": "The lamp is on NC, so it is lit when the relay is OFF."}
+      ],
+      "reward_credits": 15
+    },
+    {
+      "id": "level3",
+      "floor": 1,
+      "title": "Seal-In Circuit",
+      "learning_objective": "START (NO) starts the coil. The relay's own NO contact holds it after START is released. STOP (NC) breaks the circuit.",
+      "devices": [
+        {"type": "pb_no", "x": 60, "y": 80, "id": "start"},
+        {"type": "pb_nc", "x": 60, "y": 180, "id": "stop"},
+        {"type": "relay", "x": 180, "y": 120, "id": "r1"},
+        {"type": "lamp", "x": 300, "y": 120, "id": "l1"}
+      ],
+      "correct_connections": [
+        {"from": "24v", "to": "stop.1"},
+        {"from": "stop.2", "to": "start.1"},
+        {"from": "start.2", "to": "r1.A1"},
+        {"from": "r1.NO", "to": "start.2"},
+        {"from": "r1.A2", "to": "gnd"},
+        {"from": "r1.COM", "to": "24v"},
+        {"from": "r1.NO", "to": "l1.+"},
+        {"from": "l1.-", "to": "gnd"}
+      ],
+      "reward_credits": 20
+    },
+    {
+      "id": "fa_level1",
+      "floor": 3,
+      "title": "Pull Station + EOL",
+      "learning_objective": "A pull station on a monitor module circuit shows NORMAL with EOL, TROUBLE if open, ALARM when pulled.",
+      "devices": [
+        {"type": "monitor_module", "x": 150, "y": 150, "id": "mm1"},
+        {"type": "pull_station", "x": 280, "y": 100, "id": "ps1"},
+        {"type": "eol", "x": 320, "y": 200, "id": "eol1"}
+      ],
+      "correct_connections": [
+        {"from": "mm1.IN+", "to": "ps1.1"},
+        {"from": "ps1.2", "to": "eol1.1"},
+        {"from": "eol1.2", "to": "mm1.IN-"}
+      ],
+      "common_mistakes": [
+        {"connection_pattern": "no_eol", "explanation": "Missing EOL — panel sees OPEN and reports TROUBLE."}
+      ],
+      "reward_credits": 25
     }
-  }
+  ];
   if (levels.length) startLevel(levels[0]);
 }
 
