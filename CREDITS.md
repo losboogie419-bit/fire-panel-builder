@@ -1,6 +1,6 @@
 # CREDITS
 
-Fire Panel Builder is an original educational game created by Los Boogie (losboogie419-bit), released under the GNU General Public License v3.
+Fake It To You Make It is an original educational fire-alarm wiring game created by Los Boogie (losboogie419-bit), released under the GNU General Public License v3.
 
 ## Ideas and Inspiration
 

@@ -1,8 +1,8 @@
-# Fire Panel Builder
+# Fake It To You Make It
 
-Open-source educational electrical / fire-alarm wiring game by Los Boogie (losboogie419-bit).
+Open-source educational fire-alarm / electrical panel wiring game by Los Boogie (losboogie419-bit).
 
-Licensed under GPL v3. See LICENSE and CREDITS.md.
+Build real panels floor by floor. Licensed under GPL v3.
 
 ## How to Play
 

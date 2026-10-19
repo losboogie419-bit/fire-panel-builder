@@ -1,6 +1,6 @@
 {
-  "name": "Fire Panel Builder",
-  "short_name": "FirePanel",
+  "name": "Fake It To You Make It",
+  "short_name": "FakeIt",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#140A26",
