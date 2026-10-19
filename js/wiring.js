@@ -1,4 +1,4 @@
-// wiring.js - multimeter support added
+// wiring.js - color support + multimeter
 const Wiring = {
   canvas: null,
   ctx: null,
@@ -8,6 +8,7 @@ const Wiring = {
   meterMode: false,
   meterPoints: [],
   lastReading: null,
+  currentColor: '#c8102e',
   scale: 1,
   offsetX: 0,
   offsetY: 0,
@@ -121,7 +122,7 @@ const Wiring = {
           this.wires.push({
             from: `${this.selectedTerminal.device}.${this.selectedTerminal.terminal}`,
             to: `${closest.device}.${closest.terminal}`,
-            color: '#c8102e'
+            color: this.currentColor || '#c8102e'
           });
           this.selectedTerminal = null;
         } else {
