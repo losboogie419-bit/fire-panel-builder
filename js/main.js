@@ -1,4 +1,4 @@
-// main.js - levels embedded so preview links work
+// main.js - levels embedded + mobile positions
 let currentLevel = null;
 let levels = [];
 
@@ -10,7 +10,7 @@ function loadLevels() {
       "title": "Relay Anatomy",
       "learning_objective": "Identify coil A1/A2, COM, NO, and NC terminals. NO is open until coil is energized.",
       "devices": [
-        {"type": "relay", "x": 150, "y": 200, "id": "r1"}
+        {"type": "relay", "x": 80, "y": 100, "id": "r1"}
       ],
       "correct_connections": [],
       "common_mistakes": [
@@ -24,9 +24,9 @@ function loadLevels() {
       "title": "Basic Relay Control",
       "learning_objective": "Pushbutton energizes the coil (24VDC). Relay NO contact switches the lamp on.",
       "devices": [
-        {"type": "pb_no", "x": 80, "y": 100, "id": "pb1"},
-        {"type": "relay", "x": 180, "y": 150, "id": "r1"},
-        {"type": "lamp", "x": 280, "y": 100, "id": "l1"}
+        {"type": "pb_no", "x": 30, "y": 50, "id": "pb1"},
+        {"type": "relay", "x": 110, "y": 90, "id": "r1"},
+        {"type": "lamp", "x": 200, "y": 50, "id": "l1"}
       ],
       "correct_connections": [
         {"from": "pb1.1", "to": "r1.A1"},
@@ -47,10 +47,10 @@ function loadLevels() {
       "title": "Seal-In Circuit",
       "learning_objective": "START (NO) starts the coil. The relay's own NO contact holds it after START is released. STOP (NC) breaks the circuit.",
       "devices": [
-        {"type": "pb_no", "x": 60, "y": 80, "id": "start"},
-        {"type": "pb_nc", "x": 60, "y": 180, "id": "stop"},
-        {"type": "relay", "x": 180, "y": 120, "id": "r1"},
-        {"type": "lamp", "x": 300, "y": 120, "id": "l1"}
+        {"type": "pb_no", "x": 20, "y": 40, "id": "start"},
+        {"type": "pb_nc", "x": 20, "y": 140, "id": "stop"},
+        {"type": "relay", "x": 120, "y": 80, "id": "r1"},
+        {"type": "lamp", "x": 210, "y": 80, "id": "l1"}
       ],
       "correct_connections": [
         {"from": "24v", "to": "stop.1"},
@@ -70,9 +70,9 @@ function loadLevels() {
       "title": "Pull Station + EOL",
       "learning_objective": "A pull station on a monitor module circuit shows NORMAL with EOL, TROUBLE if open, ALARM when pulled.",
       "devices": [
-        {"type": "monitor_module", "x": 150, "y": 150, "id": "mm1"},
-        {"type": "pull_station", "x": 280, "y": 100, "id": "ps1"},
-        {"type": "eol", "x": 320, "y": 200, "id": "eol1"}
+        {"type": "monitor_module", "x": 60, "y": 80, "id": "mm1"},
+        {"type": "pull_station", "x": 180, "y": 40, "id": "ps1"},
+        {"type": "eol", "x": 200, "y": 140, "id": "eol1"}
       ],
       "correct_connections": [
         {"from": "mm1.IN+", "to": "ps1.1"},
