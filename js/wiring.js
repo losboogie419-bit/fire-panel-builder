@@ -1,10 +1,13 @@
-// wiring.js - improved terminal positions and real wire drawing
+// wiring.js - multimeter support added
 const Wiring = {
   canvas: null,
   ctx: null,
   devices: [],
   wires: [],
   selectedTerminal: null,
+  meterMode: false,
+  meterPoints: [],
+  lastReading: null,
   scale: 1,
   offsetX: 0,
   offsetY: 0,
@@ -32,6 +35,9 @@ const Wiring = {
     });
     this.wires = [];
     this.selectedTerminal = null;
+    this.meterMode = false;
+    this.meterPoints = [];
+    this.lastReading = null;
     this.draw();
   },
 
@@ -102,20 +108,46 @@ const Wiring = {
     }
 
     if (closest) {
-      if (!this.selectedTerminal) {
-        this.selectedTerminal = closest;
-      } else if (this.selectedTerminal.device !== closest.device || this.selectedTerminal.terminal !== closest.terminal) {
-        this.wires.push({
-          from: `${this.selectedTerminal.device}.${this.selectedTerminal.terminal}`,
-          to: `${closest.device}.${closest.terminal}`,
-          color: '#c8102e'
-        });
-        this.selectedTerminal = null;
+      if (this.meterMode) {
+        this.meterPoints.push(closest);
+        if (this.meterPoints.length === 2) {
+          this.lastReading = this.measure(this.meterPoints[0], this.meterPoints[1]);
+          this.meterPoints = [];
+        }
       } else {
-        this.selectedTerminal = null;
+        if (!this.selectedTerminal) {
+          this.selectedTerminal = closest;
+        } else if (this.selectedTerminal.device !== closest.device || this.selectedTerminal.terminal !== closest.terminal) {
+          this.wires.push({
+            from: `${this.selectedTerminal.device}.${this.selectedTerminal.terminal}`,
+            to: `${closest.device}.${closest.terminal}`,
+            color: '#c8102e'
+          });
+          this.selectedTerminal = null;
+        } else {
+          this.selectedTerminal = null;
+        }
       }
       this.draw();
     }
+  },
+
+  measure(a, b) {
+    const keyA = `${a.device}.${a.terminal}`;
+    const keyB = `${b.device}.${b.terminal}`;
+    const connected = this.wires.some(w =>
+      (w.from === keyA && w.to === keyB) || (w.from === keyB && w.to === keyA)
+    );
+
+    if (connected) {
+      return { type: 'ohms', value: '0.1 Ω', note: 'Direct short / solid connection' };
+    }
+
+    if ((keyA.includes('A1') || keyB.includes('A1')) && (keyA.includes('A2') || keyB.includes('A2'))) {
+      return { type: 'volts', value: '24 V DC', note: 'Coil path' };
+    }
+
+    return { type: 'ohms', value: 'OL (open)', note: 'No direct path between these points' };
   },
 
   onPointerMove(e) {
@@ -129,7 +161,6 @@ const Wiring = {
     ctx.translate(this.offsetX, this.offsetY);
     ctx.scale(this.scale, this.scale);
 
-    // Draw wires first
     ctx.lineWidth = 3;
     for (const w of this.wires) {
       const [fromDev, fromTerm] = w.from.split('.');
@@ -145,7 +176,6 @@ const Wiring = {
       }
     }
 
-    // Devices
     for (const dev of this.devices) {
       ctx.fillStyle = '#24143F';
       ctx.fillRect(dev.x, dev.y, dev.width, dev.height);
@@ -175,6 +205,17 @@ const Wiring = {
         ctx.fillText(t.label, tx, ty + 3);
         ctx.textAlign = 'left';
       }
+    }
+
+    if (this.lastReading) {
+      ctx.fillStyle = 'rgba(20,10,38,0.85)';
+      ctx.fillRect(10, 10, 220, 50);
+      ctx.fillStyle = '#38E1F5';
+      ctx.font = 'bold 14px system-ui';
+      ctx.fillText(this.lastReading.value, 20, 30);
+      ctx.fillStyle = '#D8B4FE';
+      ctx.font = '11px system-ui';
+      ctx.fillText(this.lastReading.note, 20, 48);
     }
 
     ctx.restore();
