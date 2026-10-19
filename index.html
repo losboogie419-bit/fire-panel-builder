@@ -37,11 +37,13 @@
     <div id="canvas-wrap">
       <canvas id="game"></canvas>
     </div>
-    <div id="ui" style="padding: 8px; background: var(--card);">
+    <div id="ui" style="padding: 8px; background: var(--card); display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
       <button id="btn-wire">Wire</button>
       <button id="btn-meter">Meter</button>
-      <button id="btn-test">Test Circuit</button>
-      <button id="btn-next" class="secondary">Next Floor</button>
+      <button id="btn-color" style="background:#c8102e; color:white;">Red</button>
+      <button id="btn-clear" class="secondary">Clear</button>
+      <button id="btn-test">Test</button>
+      <button id="btn-floors" class="secondary">Floors</button>
     </div>
   </div>
   <script src="js/progress.js"></script>
