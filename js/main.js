@@ -40,6 +40,25 @@ function testCircuit() {
 }
 
 document.getElementById('btn-test').onclick = testCircuit;
+
+document.getElementById('btn-meter').onclick = () => {
+  Wiring.meterMode = !Wiring.meterMode;
+  Wiring.meterPoints = [];
+  Wiring.lastReading = null;
+  const btn = document.getElementById('btn-meter');
+  btn.style.background = Wiring.meterMode ? '#e2b423' : '#38E1F5';
+  btn.textContent = Wiring.meterMode ? 'Meter ON' : 'Meter';
+  Wiring.draw();
+};
+
+document.getElementById('btn-wire').onclick = () => {
+  Wiring.meterMode = false;
+  Wiring.meterPoints = [];
+  const btn = document.getElementById('btn-meter');
+  btn.style.background = '#38E1F5';
+  btn.textContent = 'Meter';
+  Wiring.draw();
+};
 document.getElementById('btn-next').onclick = () => {
   const idx = levels.findIndex(l => l.id === currentLevel.id);
   if (idx >= 0 && idx < levels.length - 1) {
