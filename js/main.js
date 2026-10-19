@@ -1,14 +1,18 @@
-// main.js - game loop, level loading, UI
+// main.js - improved level flow and feedback
 let currentLevel = null;
 let levels = [];
 
 async function loadLevels() {
   const levelFiles = ['level1.json', 'level2.json', 'level3.json', 'fa_level1.json'];
   for (const f of levelFiles) {
-    const res = await fetch(`levels/${f}`);
-    levels.push(await res.json());
+    try {
+      const res = await fetch(`levels/${f}`);
+      if (res.ok) levels.push(await res.json());
+    } catch (e) {
+      console.warn('Could not load', f);
+    }
   }
-  startLevel(levels[0]);
+  if (levels.length) startLevel(levels[0]);
 }
 
 function startLevel(level) {
@@ -20,9 +24,10 @@ function startLevel(level) {
 }
 
 function testCircuit() {
+  if (!currentLevel) return;
   const result = Simulation.evaluate(currentLevel, Wiring.wires, { start: true });
   if (result.success) {
-    alert('Circuit correct! Floor running.\n' + (currentLevel.learning_objective || ''));
+    alert('Correct! Floor is running.\n\n' + (currentLevel.learning_objective || 'Nice work.'));
     Progress.addCredits(currentLevel.reward_credits || 10);
     Progress.completeLevel(currentLevel.id);
     if (currentLevel.floor === Progress.data.unlockedFloors) {
@@ -30,14 +35,18 @@ function testCircuit() {
     }
     document.getElementById('credits').textContent = Progress.data.credits;
   } else {
-    alert('Not yet:\n' + result.errors.join('\n'));
+    alert('Not quite:\n\n' + (result.errors.length ? result.errors.join('\n') : 'Check your connections.'));
   }
 }
 
 document.getElementById('btn-test').onclick = testCircuit;
 document.getElementById('btn-next').onclick = () => {
   const idx = levels.findIndex(l => l.id === currentLevel.id);
-  if (idx < levels.length - 1) startLevel(levels[idx + 1]);
+  if (idx >= 0 && idx < levels.length - 1) {
+    startLevel(levels[idx + 1]);
+  } else {
+    alert('More floors coming soon.');
+  }
 };
 
 window.onload = () => {
