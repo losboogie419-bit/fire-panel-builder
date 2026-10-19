@@ -1,4 +1,4 @@
-// wiring.js - color support + multimeter
+// wiring.js - mobile-friendly resize + color + meter
 const Wiring = {
   canvas: null,
   ctx: null,
@@ -24,8 +24,10 @@ const Wiring = {
 
   resize() {
     const wrap = this.canvas.parentElement;
-    this.canvas.width = wrap.clientWidth;
-    this.canvas.height = wrap.clientHeight;
+    const w = wrap.clientWidth || window.innerWidth;
+    const h = wrap.clientHeight || (window.innerHeight - 140);
+    this.canvas.width = w;
+    this.canvas.height = Math.max(h, 320);
     this.draw();
   },
 
@@ -95,7 +97,7 @@ const Wiring = {
     const y = (e.clientY - rect.top - this.offsetY) / this.scale;
 
     let closest = null;
-    let minDist = 22;
+    let minDist = 28;
     for (const dev of this.devices) {
       for (const term of dev.terminals) {
         const tx = dev.x + term.x;
@@ -197,7 +199,7 @@ const Wiring = {
 
         ctx.fillStyle = isSelected ? '#38E1F5' : '#D8B4FE';
         ctx.beginPath();
-        ctx.arc(tx, ty, 7, 0, Math.PI * 2);
+        ctx.arc(tx, ty, 8, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.fillStyle = '#140A26';
