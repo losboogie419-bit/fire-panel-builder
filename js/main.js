@@ -1,4 +1,4 @@
-// main.js - mobile controls: color, clear, floors
+// main.js - stress + title support
 let currentLevel = null;
 let levels = [];
 
@@ -21,6 +21,7 @@ function startLevel(level) {
   Wiring.loadLevel(level);
   Progress.load();
   document.getElementById('credits').textContent = Progress.data.credits;
+  document.getElementById('stress').textContent = Progress.data.stress || 0;
 }
 
 function testCircuit() {
@@ -29,6 +30,9 @@ function testCircuit() {
   if (result.success) {
     alert('Correct! Floor is running.\n\n' + (currentLevel.learning_objective || 'Nice work.'));
     Progress.addCredits(currentLevel.reward_credits || 10);
+    Progress.addStress(5);
+    Progress.reduceStress(12);
+    document.getElementById('stress').textContent = Progress.data.stress;
     Progress.completeLevel(currentLevel.id);
     if (currentLevel.floor === Progress.data.unlockedFloors) {
       Progress.unlockFloor(currentLevel.floor + 1);
