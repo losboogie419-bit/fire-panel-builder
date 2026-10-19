@@ -1,4 +1,4 @@
-// main.js - improved level flow and feedback
+// main.js - mobile controls: color, clear, floors
 let currentLevel = null;
 let levels = [];
 
@@ -59,12 +59,35 @@ document.getElementById('btn-wire').onclick = () => {
   btn.textContent = 'Meter';
   Wiring.draw();
 };
-document.getElementById('btn-next').onclick = () => {
-  const idx = levels.findIndex(l => l.id === currentLevel.id);
-  if (idx >= 0 && idx < levels.length - 1) {
-    startLevel(levels[idx + 1]);
-  } else {
-    alert('More floors coming soon.');
+
+let wireColor = '#c8102e';
+
+document.getElementById('btn-color').onclick = () => {
+  const colors = ['#c8102e', '#000000', '#38E1F5', '#e2b423', '#FFFFFF'];
+  const names = ['Red', 'Black', 'Cyan', 'Gold', 'White'];
+  const idx = colors.indexOf(wireColor);
+  const next = (idx + 1) % colors.length;
+  wireColor = colors[next];
+  const btn = document.getElementById('btn-color');
+  btn.style.background = wireColor;
+  btn.style.color = (wireColor === '#000000' || wireColor === '#FFFFFF') ? '#140A26' : '#FFFFFF';
+  btn.textContent = names[next];
+  Wiring.currentColor = wireColor;
+};
+
+document.getElementById('btn-clear').onclick = () => {
+  Wiring.wires = [];
+  Wiring.lastReading = null;
+  Wiring.draw();
+};
+
+document.getElementById('btn-floors').onclick = () => {
+  const unlocked = Progress.data.unlockedFloors || 1;
+  const choice = prompt(`Go to floor (1-${unlocked}):`, '1');
+  const floor = parseInt(choice);
+  if (floor >= 1 && floor <= unlocked) {
+    const level = levels.find(l => l.floor === floor);
+    if (level) startLevel(level);
   }
 };
 
