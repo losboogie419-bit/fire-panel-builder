@@ -1,7 +1,13 @@
-// progress.js - localStorage save/load
+// progress.js - credits, floors, stress
 const Progress = {
-  key: 'panelbuilder_progress',
-  data: { credits: 0, unlockedFloors: 1, completedLevels: [] },
+  key: 'fakeit_progress',
+  data: {
+    credits: 0,
+    unlockedFloors: 1,
+    completedLevels: [],
+    stress: 0,
+    tools: { meter: 'basic' }
+  },
   load() {
     const raw = localStorage.getItem(this.key);
     if (raw) this.data = JSON.parse(raw);
@@ -12,6 +18,14 @@ const Progress = {
   },
   addCredits(n) {
     this.data.credits += n;
+    this.save();
+  },
+  addStress(n) {
+    this.data.stress = Math.min(100, this.data.stress + n);
+    this.save();
+  },
+  reduceStress(n) {
+    this.data.stress = Math.max(0, this.data.stress - n);
     this.save();
   },
   completeLevel(id) {
