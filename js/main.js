@@ -1,4 +1,4 @@
-// main.js - levels embedded + mobile positions
+// main.js - levels embedded + store + floors
 let currentLevel = null;
 let levels = [];
 
@@ -157,6 +157,8 @@ document.getElementById('btn-clear').onclick = () => {
   Wiring.lastReading = null;
   Wiring.draw();
 };
+
+document.getElementById('btn-store').onclick = () => Store.open();
 
 document.getElementById('btn-floors').onclick = () => {
   const unlocked = Progress.data.unlockedFloors || 1;
