@@ -1,4 +1,4 @@
-// main.js - floor map toggle
+// main.js - expanded levels + map + store
 let currentLevel = null;
 let levels = [];
 let mapMode = false;
@@ -66,6 +66,28 @@ function loadLevels() {
       "reward_credits": 20
     },
     {
+      "id": "level_and",
+      "floor": 2,
+      "title": "AND Gate (Relay)",
+      "learning_objective": "Two NO buttons in series — both must be pressed to energize the coil.",
+      "devices": [
+        {"type": "pb_no", "x": 30, "y": 40, "id": "a"},
+        {"type": "pb_no", "x": 30, "y": 120, "id": "b"},
+        {"type": "relay", "x": 140, "y": 70, "id": "r1"},
+        {"type": "lamp", "x": 250, "y": 70, "id": "l1"}
+      ],
+      "correct_connections": [
+        {"from": "24v", "to": "a.1"},
+        {"from": "a.2", "to": "b.1"},
+        {"from": "b.2", "to": "r1.A1"},
+        {"from": "r1.A2", "to": "gnd"},
+        {"from": "r1.COM", "to": "24v"},
+        {"from": "r1.NO", "to": "l1.+"},
+        {"from": "l1.-", "to": "gnd"}
+      ],
+      "reward_credits": 20
+    },
+    {
       "id": "fa_level1",
       "floor": 3,
       "title": "Pull Station + EOL",
@@ -84,6 +106,26 @@ function loadLevels() {
         {"connection_pattern": "no_eol", "explanation": "Missing EOL — panel sees OPEN and reports TROUBLE."}
       ],
       "reward_credits": 25
+    },
+    {
+      "id": "trouble_open",
+      "floor": 3,
+      "title": "Troubleshooting: Open Wire",
+      "learning_objective": "Find the open on a supervised circuit with the meter.",
+      "devices": [
+        {"type": "monitor_module", "x": 60, "y": 80, "id": "mm1"},
+        {"type": "pull_station", "x": 180, "y": 40, "id": "ps1"},
+        {"type": "eol", "x": 200, "y": 140, "id": "eol1"}
+      ],
+      "correct_connections": [
+        {"from": "mm1.IN+", "to": "ps1.1"},
+        {"from": "ps1.2", "to": "eol1.1"},
+        {"from": "eol1.2", "to": "mm1.IN-"}
+      ],
+      "common_mistakes": [
+        {"connection_pattern": "no_eol", "explanation": "Open circuit — panel reports TROUBLE."}
+      ],
+      "reward_credits": 30
     }
   ];
   if (levels.length) startLevel(levels[0]);
@@ -96,7 +138,6 @@ function startLevel(level) {
   Progress.load();
   document.getElementById('credits').textContent = Progress.data.credits;
   document.getElementById('stress').textContent = Progress.data.stress || 0;
-  // exit map mode if open
   if (mapMode) {
     mapMode = false;
     document.getElementById('game').style.display = 'block';
