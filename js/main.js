@@ -1,6 +1,7 @@
-// main.js - levels embedded + store + floors
+// main.js - floor map toggle
 let currentLevel = null;
 let levels = [];
+let mapMode = false;
 
 function loadLevels() {
   levels = [
@@ -95,6 +96,12 @@ function startLevel(level) {
   Progress.load();
   document.getElementById('credits').textContent = Progress.data.credits;
   document.getElementById('stress').textContent = Progress.data.stress || 0;
+  // exit map mode if open
+  if (mapMode) {
+    mapMode = false;
+    document.getElementById('game').style.display = 'block';
+    document.getElementById('map').style.display = 'none';
+  }
 }
 
 function testCircuit() {
@@ -161,12 +168,17 @@ document.getElementById('btn-clear').onclick = () => {
 document.getElementById('btn-store').onclick = () => Store.open();
 
 document.getElementById('btn-floors').onclick = () => {
-  const unlocked = Progress.data.unlockedFloors || 1;
-  const choice = prompt(`Go to floor (1-${unlocked}):`, '1');
-  const floor = parseInt(choice);
-  if (floor >= 1 && floor <= unlocked) {
-    const level = levels.find(l => l.floor === floor);
-    if (level) startLevel(level);
+  mapMode = !mapMode;
+  const gameCanvas = document.getElementById('game');
+  const mapCanvas = document.getElementById('map');
+  if (mapMode) {
+    gameCanvas.style.display = 'none';
+    mapCanvas.style.display = 'block';
+    FloorMap.init(mapCanvas);
+    FloorMap.setUnlocked(Progress.data.unlockedFloors || 1);
+  } else {
+    gameCanvas.style.display = 'block';
+    mapCanvas.style.display = 'none';
   }
 };
 
