@@ -1,4 +1,4 @@
-// floorMap.js - visual building + tech with smooth walk
+// floorMap.js - better tech graphics
 const FloorMap = {
   canvas: null,
   ctx: null,
@@ -91,24 +91,35 @@ const FloorMap = {
       ctx.fillRect(this.canvas.width - 90, f.y + 20, 30, 40);
     });
 
-    // Tech stick figure
+    // Tech with hard hat and tool bag
     ctx.fillStyle = '#e2b423';
     ctx.beginPath();
-    ctx.arc(this.techX, this.techY - 18, 8, 0, Math.PI * 2);
+    ctx.arc(this.techX, this.techY - 22, 9, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#e2b423';
-    ctx.lineWidth = 3;
+    ctx.fillStyle = '#c8102e';
     ctx.beginPath();
-    ctx.moveTo(this.techX, this.techY - 10);
-    ctx.lineTo(this.techX, this.techY + 15);
-    ctx.lineTo(this.techX - 10, this.techY + 25);
-    ctx.moveTo(this.techX, this.techY + 15);
-    ctx.lineTo(this.techX + 10, this.techY + 25);
-    ctx.moveTo(this.techX, this.techY);
-    ctx.lineTo(this.techX - 12, this.techY + 5);
-    ctx.moveTo(this.techX, this.techY);
-    ctx.lineTo(this.techX + 12, this.techY + 5);
+    ctx.arc(this.techX, this.techY - 26, 10, Math.PI, 0);
+    ctx.fill();
+
+    ctx.strokeStyle = '#e2b423';
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.moveTo(this.techX, this.techY - 13);
+    ctx.lineTo(this.techX, this.techY + 12);
+    ctx.lineTo(this.techX - 11, this.techY + 26);
+    ctx.moveTo(this.techX, this.techY + 12);
+    ctx.lineTo(this.techX + 11, this.techY + 26);
+    ctx.moveTo(this.techX, this.techY - 2);
+    ctx.lineTo(this.techX - 14, this.techY + 6);
+    ctx.moveTo(this.techX, this.techY - 2);
+    ctx.lineTo(this.techX + 14, this.techY + 6);
     ctx.stroke();
+
+    ctx.fillStyle = '#24143F';
+    ctx.fillRect(this.techX + 12, this.techY + 2, 10, 8);
+    ctx.strokeStyle = '#38E1F5';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(this.techX + 12, this.techY + 2, 10, 8);
 
     const stress = Progress.data.stress || 0;
     if (stress > 60) {
