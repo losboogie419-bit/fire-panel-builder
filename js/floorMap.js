@@ -1,4 +1,4 @@
-// floorMap.js - better tech graphics
+// floorMap.js - floor glow + better tech
 const FloorMap = {
   canvas: null,
   ctx: null,
@@ -80,6 +80,10 @@ const FloorMap = {
     this.floors.forEach(f => {
       ctx.fillStyle = f.unlocked ? '#24143F' : '#2a1a45';
       ctx.fillRect(40, f.y, this.canvas.width - 80, 70);
+      if (f.unlocked) {
+        ctx.fillStyle = 'rgba(56, 225, 245, 0.08)';
+        ctx.fillRect(40, f.y, this.canvas.width - 80, 70);
+      }
       ctx.strokeStyle = f.unlocked ? '#38E1F5' : '#7A6A99';
       ctx.strokeRect(40, f.y, this.canvas.width - 80, 70);
 
