@@ -1,4 +1,4 @@
-// floorMap.js - visual building + tech
+// floorMap.js - visual building + tech with smooth walk
 const FloorMap = {
   canvas: null,
   ctx: null,
@@ -47,12 +47,26 @@ const FloorMap = {
     const f = this.floors.find(fl => fl.id === floorId);
     if (!f || !f.unlocked) return;
     this.targetFloor = floorId;
-    this.techY = f.y + 20;
-    this.draw();
-    setTimeout(() => {
-      const level = levels.find(l => l.floor === floorId);
-      if (level) startLevel(level);
-    }, 400);
+    const startY = this.techY;
+    const endY = f.y + 20;
+    const startTime = performance.now();
+    const duration = 600;
+
+    const animate = (now) => {
+      const t = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      this.techY = startY + (endY - startY) * eased;
+      this.draw();
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setTimeout(() => {
+          const level = levels.find(l => l.floor === floorId);
+          if (level) startLevel(level);
+        }, 200);
+      }
+    };
+    requestAnimationFrame(animate);
   },
 
   draw() {
