@@ -1,4 +1,4 @@
-// main.js - expanded levels + map + store
+// main.js - more fire alarm levels
 let currentLevel = null;
 let levels = [];
 let mapMode = false;
@@ -106,6 +106,64 @@ function loadLevels() {
         {"connection_pattern": "no_eol", "explanation": "Missing EOL — panel sees OPEN and reports TROUBLE."}
       ],
       "reward_credits": 25
+    },
+    {
+      "id": "smoke_eol",
+      "floor": 3,
+      "title": "Smoke Detector + EOL",
+      "learning_objective": "Class B smoke circuit with EOL at the last device. Open = TROUBLE, short = ALARM.",
+      "devices": [
+        {"type": "monitor_module", "x": 50, "y": 80, "id": "mm1"},
+        {"type": "pull_station", "x": 160, "y": 40, "id": "sd1"},
+        {"type": "eol", "x": 180, "y": 150, "id": "eol1"}
+      ],
+      "correct_connections": [
+        {"from": "mm1.IN+", "to": "sd1.1"},
+        {"from": "sd1.2", "to": "eol1.1"},
+        {"from": "eol1.2", "to": "mm1.IN-"}
+      ],
+      "common_mistakes": [
+        {"connection_pattern": "no_eol", "explanation": "Missing EOL — panel reports TROUBLE (open circuit)."}
+      ],
+      "reward_credits": 25
+    },
+    {
+      "id": "nac_polarity",
+      "floor": 3,
+      "title": "NAC Polarity",
+      "learning_objective": "Notification appliances must be wired with correct polarity. Reversed polarity = silent or damage.",
+      "devices": [
+        {"type": "monitor_module", "x": 60, "y": 90, "id": "nac"},
+        {"type": "lamp", "x": 180, "y": 70, "id": "horn"}
+      ],
+      "correct_connections": [
+        {"from": "nac.IN+", "to": "horn.+"},
+        {"from": "horn.-", "to": "nac.IN-"}
+      ],
+      "common_mistakes": [
+        {"connection_pattern": "reversed_polarity", "explanation": "Polarity reversed — appliance will not sound."}
+      ],
+      "reward_credits": 30
+    },
+    {
+      "id": "ground_fault",
+      "floor": 3,
+      "title": "Troubleshooting: Ground Fault",
+      "learning_objective": "A ground fault on the circuit will show low resistance to ground on the meter.",
+      "devices": [
+        {"type": "monitor_module", "x": 70, "y": 90, "id": "mm1"},
+        {"type": "pull_station", "x": 180, "y": 60, "id": "ps1"},
+        {"type": "eol", "x": 200, "y": 160, "id": "eol1"}
+      ],
+      "correct_connections": [
+        {"from": "mm1.IN+", "to": "ps1.1"},
+        {"from": "ps1.2", "to": "eol1.1"},
+        {"from": "eol1.2", "to": "mm1.IN-"}
+      ],
+      "common_mistakes": [
+        {"connection_pattern": "no_eol", "explanation": "Ground fault or open — check resistance to ground."}
+      ],
+      "reward_credits": 35
     },
     {
       "id": "trouble_open",
