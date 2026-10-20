@@ -1,4 +1,4 @@
-// wiring.js - better device graphics
+// wiring.js - better meter readings
 const Wiring = {
   canvas: null,
   ctx: null,
@@ -143,14 +143,18 @@ const Wiring = {
     );
 
     if (connected) {
-      return { type: 'ohms', value: '0.1 Ω', note: 'Direct short / solid connection' };
+      return { type: 'ohms', value: '0.1 Ω', note: 'Solid connection' };
     }
 
     if ((keyA.includes('A1') || keyB.includes('A1')) && (keyA.includes('A2') || keyB.includes('A2'))) {
-      return { type: 'volts', value: '24 V DC', note: 'Coil path' };
+      return { type: 'volts', value: '24 V DC', note: 'Coil voltage' };
     }
 
-    return { type: 'ohms', value: 'OL (open)', note: 'No direct path between these points' };
+    if (keyA.includes('eol') || keyB.includes('eol') || keyA.includes('IN') || keyB.includes('IN')) {
+      return { type: 'volts', value: '0.5 mA', note: 'EOL supervision current' };
+    }
+
+    return { type: 'ohms', value: 'OL', note: 'Open circuit' };
   },
 
   onPointerMove(e) {
