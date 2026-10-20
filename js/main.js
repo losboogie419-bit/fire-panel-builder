@@ -1,4 +1,4 @@
-// main.js - more fire alarm levels
+// main.js - sound on clear + expanded levels
 let currentLevel = null;
 let levels = [];
 let mapMode = false;
@@ -203,10 +203,22 @@ function startLevel(level) {
   }
 }
 
+function playSuccessBeep() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    osc.frequency.value = 880;
+    osc.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.12);
+  } catch (e) {}
+}
+
 function testCircuit() {
   if (!currentLevel) return;
   const result = Simulation.evaluate(currentLevel, Wiring.wires, { start: true });
   if (result.success) {
+    playSuccessBeep();
     alert('Correct! Floor is running.\n\n' + (currentLevel.learning_objective || 'Nice work.'));
     Progress.addCredits(currentLevel.reward_credits || 10);
     Progress.addStress(5);
