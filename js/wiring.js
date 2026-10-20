@@ -1,4 +1,4 @@
-// wiring.js - mobile-friendly resize + color + meter
+// wiring.js - better device graphics
 const Wiring = {
   canvas: null,
   ctx: null,
@@ -180,15 +180,19 @@ const Wiring = {
     }
 
     for (const dev of this.devices) {
-      ctx.fillStyle = '#24143F';
+      ctx.fillStyle = '#1e1035';
       ctx.fillRect(dev.x, dev.y, dev.width, dev.height);
-      ctx.strokeStyle = '#3B1F66';
+      ctx.fillStyle = '#2a1848';
+      ctx.fillRect(dev.x + 2, dev.y + 2, dev.width - 4, dev.height - 4);
+      ctx.strokeStyle = '#4a2a7a';
       ctx.lineWidth = 2;
       ctx.strokeRect(dev.x, dev.y, dev.width, dev.height);
 
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 11px system-ui';
-      ctx.fillText(dev.type.replace('_', ' '), dev.x + 8, dev.y + 16);
+      ctx.fillStyle = '#140A26';
+      ctx.fillRect(dev.x + 6, dev.y + 4, 100, 16);
+      ctx.fillStyle = '#38E1F5';
+      ctx.font = 'bold 9px system-ui';
+      ctx.fillText(dev.type.replace('_', ' ').toUpperCase(), dev.x + 8, dev.y + 15);
 
       for (const t of dev.terminals) {
         const tx = dev.x + t.x;
@@ -197,15 +201,25 @@ const Wiring = {
           this.selectedTerminal.device === dev.id &&
           this.selectedTerminal.terminal === t.id;
 
-        ctx.fillStyle = isSelected ? '#38E1F5' : '#D8B4FE';
+        ctx.fillStyle = '#0a0518';
         ctx.beginPath();
-        ctx.arc(tx, ty, 8, 0, Math.PI * 2);
+        ctx.arc(tx, ty, 10, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = '#140A26';
-        ctx.font = 'bold 8px system-ui';
+        ctx.fillStyle = isSelected ? '#38E1F5' : '#D8B4FE';
+        ctx.beginPath();
+        ctx.arc(tx, ty, 7, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = isSelected ? '#ffffff' : '#f0e6ff';
+        ctx.beginPath();
+        ctx.arc(tx - 1, ty - 1, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 7px system-ui';
         ctx.textAlign = 'center';
-        ctx.fillText(t.label, tx, ty + 3);
+        ctx.fillText(t.label, tx, ty + 18);
         ctx.textAlign = 'left';
       }
     }
