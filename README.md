@@ -1,34 +1,22 @@
-# Fake It To You Make It
+# Fake It Till You Make It
 
-Open-source educational fire-alarm / electrical panel wiring game by Los Boogie (losboogie419-bit).
+16-bit Tiny Death Star-style fire alarm tech learning game by Los Boogie.
 
-Build real panels floor by floor. Licensed under GPL v3.
+Walk the building floors, interact with panels for close-up wiring and metering, earn credits, buy KLONE tools.
 
-## How to Play
+## Play
 
-1. Open `index.html` in any modern browser (works offline).
-2. On mobile, tap terminals to run wires. Pinch to zoom (basic support).
-3. Test the circuit. Correct wiring lights the floor and awards credits.
-4. Progress is saved in localStorage.
+Open `index.html` in a browser (or GitHub Pages once enabled).
 
-## MVP Floors
+## Controls
 
-- Floor 1: Relay basics (levels 1-3)
-- Floor 2: Seal-in + logic (planned)
-- Floor 3: Troubleshooting + Pull Station + EOL
+- Left / Right: walk
+- Interact: open panel close-up when near it, or complete the job
+- In close-up: tap terminals to run wires
+- Store: buy tools with credits
 
-## Adding Levels
+## Status
 
-See AUTHORING.md. Drop a new JSON in `/levels/` and it loads.
+Playable v1: building walk, close-up wiring, credits, store, stress.
 
-## Self-Test
-
-Open `test.html` to run every level's correct solution and common mistakes through the simulator.
-
-## Ideas From
-
-- VoltQuest (GPL v3) — wiring + simulation + JSON levels
-- Circuit Artist (GPL v3) — logic gates as playable parts
-- OpenTowers (GPL v3) — floor-by-floor progression
-
-No code was copied. All implementation is original vanilla JavaScript.
+More floors, real faults, programming, and better pixel art coming.
