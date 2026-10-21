@@ -21,12 +21,13 @@
     header { background: var(--card); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
     #canvas-wrap { flex: 1; position: relative; overflow: hidden; min-height: 300px; }
     canvas { display: block; background: #1a0e30; width: 100%; height: 100%; touch-action: none; }
-    .panel { background: var(--card); border-left: 4px solid transparent; padding: 10px; margin: 6px; border-radius: 8px; }
-    .panel.selected { border-left-color: var(--accent); background: var(--selected); }
     button { background: var(--accent); color: #140A26; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; min-height: 44px; margin: 4px; }
     button.secondary { background: var(--muted); color: white; }
     #status { font-size: 14px; color: var(--label); }
     #credits { color: var(--accent); font-weight: bold; }
+    #info { background: var(--card); padding: 8px; font-size: 13px; color: var(--label); max-height: 80px; overflow: auto; }
+    #store-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; }
+    #store-box { background: var(--card); margin: 40px auto; padding: 16px; max-width: 360px; border-radius: 12px; }
   </style>
 </head>
 <body>
@@ -35,6 +36,7 @@
       <div id="status">Fake It Till You Make It<br><small style="color:#D8B4FE;">Fire Alarm Panel Builder</small></div>
       <div>Stress: <span id="stress">0</span> | Credits: <span id="credits">0</span></div>
     </header>
+    <div id="info">Select a level to see the objective.</div>
     <div id="canvas-wrap">
       <canvas id="game"></canvas>
       <canvas id="map" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
@@ -49,11 +51,23 @@
       <button id="btn-store" class="secondary">KLONE Store</button>
     </div>
   </div>
+  <div id="store-modal">
+    <div id="store-box">
+      <h3>KLONE Tools</h3>
+      <div id="store-items"></div>
+      <button id="store-close" class="secondary">Close</button>
+    </div>
+  </div>
   <script src="js/progress.js"></script>
   <script src="js/simulation.js"></script>
   <script src="js/wiring.js"></script>
   <script src="js/floorMap.js"></script>
   <script src="js/store.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js');
+    }
+  </script>
 </body>
 </html>
