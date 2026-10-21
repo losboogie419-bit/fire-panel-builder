@@ -1,4 +1,4 @@
-// wiring.js - better meter readings
+// wiring.js - wires on top, better hit, drag, realistic terminals, PSU
 const Wiring = {
   canvas: null,
   ctx: null,
@@ -12,14 +12,16 @@ const Wiring = {
   scale: 1,
   offsetX: 0,
   offsetY: 0,
+  dragging: false,
 
   init(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.resize();
     window.addEventListener('resize', () => this.resize());
-    canvas.addEventListener('pointerdown', (e) => this.onPointer(e));
+    canvas.addEventListener('pointerdown', (e) => this.onPointerDown(e));
     canvas.addEventListener('pointermove', (e) => this.onPointerMove(e));
+    canvas.addEventListener('pointerup', (e) => this.onPointerUp(e));
   },
 
   resize() {
@@ -46,38 +48,42 @@ const Wiring = {
 
   getTerminals(type) {
     const defs = {
+      psu: [
+        { id: '+', label: '+24V', x: 40, y: 35 },
+        { id: '-', label: 'GND', x: 90, y: 35 }
+      ],
       relay: [
-        { id: 'A1', label: 'A1', x: 20, y: 30 },
-        { id: 'A2', label: 'A2', x: 20, y: 55 },
-        { id: 'COM', label: 'COM', x: 70, y: 30 },
-        { id: 'NO', label: 'NO', x: 100, y: 30 },
-        { id: 'NC', label: 'NC', x: 100, y: 55 }
+        { id: 'A1', label: 'A1', x: 25, y: 35 },
+        { id: 'A2', label: 'A2', x: 25, y: 60 },
+        { id: 'COM', label: 'COM', x: 70, y: 35 },
+        { id: 'NO', label: 'NO', x: 105, y: 35 },
+        { id: 'NC', label: 'NC', x: 105, y: 60 }
       ],
       pb_no: [
-        { id: '1', label: '1', x: 30, y: 40 },
-        { id: '2', label: '2', x: 70, y: 40 }
+        { id: '1', label: '1', x: 40, y: 45 },
+        { id: '2', label: '2', x: 90, y: 45 }
       ],
       pb_nc: [
-        { id: '1', label: '1', x: 30, y: 40 },
-        { id: '2', label: '2', x: 70, y: 40 }
+        { id: '1', label: '1', x: 40, y: 45 },
+        { id: '2', label: '2', x: 90, y: 45 }
       ],
       lamp: [
-        { id: '+', label: '+', x: 40, y: 35 },
-        { id: '-', label: '-', x: 80, y: 35 }
+        { id: '+', label: '+', x: 45, y: 40 },
+        { id: '-', label: '-', x: 85, y: 40 }
       ],
       monitor_module: [
-        { id: 'SLC-', label: 'SLC-', x: 15, y: 30 },
-        { id: 'SLC+', label: 'SLC+', x: 15, y: 55 },
-        { id: 'IN+', label: 'IN+', x: 80, y: 30 },
-        { id: 'IN-', label: 'IN-', x: 80, y: 55 }
+        { id: 'IN+', label: 'IN+', x: 35, y: 35 },
+        { id: 'IN-', label: 'IN-', x: 35, y: 60 },
+        { id: 'SLC+', label: 'SLC+', x: 95, y: 35 },
+        { id: 'SLC-', label: 'SLC-', x: 95, y: 60 }
       ],
       pull_station: [
-        { id: '1', label: '1', x: 35, y: 40 },
-        { id: '2', label: '2', x: 75, y: 40 }
+        { id: '1', label: '1', x: 40, y: 45 },
+        { id: '2', label: '2', x: 90, y: 45 }
       ],
       eol: [
-        { id: '1', label: '1', x: 35, y: 40 },
-        { id: '2', label: '2', x: 75, y: 40 }
+        { id: '1', label: '1', x: 40, y: 45 },
+        { id: '2', label: '2', x: 90, y: 45 }
       ]
     };
     return defs[type] || [];
@@ -91,13 +97,9 @@ const Wiring = {
     return { x: dev.x + term.x, y: dev.y + term.y };
   },
 
-  onPointer(e) {
-    const rect = this.canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left - this.offsetX) / this.scale;
-    const y = (e.clientY - rect.top - this.offsetY) / this.scale;
-
+  findTerminal(x, y) {
     let closest = null;
-    let minDist = 28;
+    let minDist = 16;
     for (const dev of this.devices) {
       for (const term of dev.terminals) {
         const tx = dev.x + term.x;
@@ -109,7 +111,14 @@ const Wiring = {
         }
       }
     }
+    return closest;
+  },
 
+  onPointerDown(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left - this.offsetX) / this.scale;
+    const y = (e.clientY - rect.top - this.offsetY) / this.scale;
+    const closest = this.findTerminal(x, y);
     if (closest) {
       if (this.meterMode) {
         this.meterPoints.push(closest);
@@ -118,21 +127,33 @@ const Wiring = {
           this.meterPoints = [];
         }
       } else {
-        if (!this.selectedTerminal) {
-          this.selectedTerminal = closest;
-        } else if (this.selectedTerminal.device !== closest.device || this.selectedTerminal.terminal !== closest.terminal) {
-          this.wires.push({
-            from: `${this.selectedTerminal.device}.${this.selectedTerminal.terminal}`,
-            to: `${closest.device}.${closest.terminal}`,
-            color: this.currentColor || '#c8102e'
-          });
-          this.selectedTerminal = null;
-        } else {
-          this.selectedTerminal = null;
-        }
+        this.selectedTerminal = closest;
+        this.dragging = true;
       }
       this.draw();
     }
+  },
+
+  onPointerMove(e) {
+    if (this.dragging && this.selectedTerminal) this.draw();
+  },
+
+  onPointerUp(e) {
+    if (!this.dragging || !this.selectedTerminal) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left - this.offsetX) / this.scale;
+    const y = (e.clientY - rect.top - this.offsetY) / this.scale;
+    const closest = this.findTerminal(x, y);
+    if (closest && (closest.device !== this.selectedTerminal.device || closest.terminal !== this.selectedTerminal.terminal)) {
+      this.wires.push({
+        from: `${this.selectedTerminal.device}.${this.selectedTerminal.terminal}`,
+        to: `${closest.device}.${closest.terminal}`,
+        color: this.currentColor || '#c8102e'
+      });
+    }
+    this.selectedTerminal = null;
+    this.dragging = false;
+    this.draw();
   },
 
   measure(a, b) {
@@ -141,24 +162,14 @@ const Wiring = {
     const connected = this.wires.some(w =>
       (w.from === keyA && w.to === keyB) || (w.from === keyB && w.to === keyA)
     );
-
-    if (connected) {
-      return { type: 'ohms', value: '0.1 Ω', note: 'Solid connection' };
-    }
-
+    if (connected) return { type: 'ohms', value: '0.1 Ω', note: 'Solid connection' };
     if ((keyA.includes('A1') || keyB.includes('A1')) && (keyA.includes('A2') || keyB.includes('A2'))) {
       return { type: 'volts', value: '24 V DC', note: 'Coil voltage' };
     }
-
     if (keyA.includes('eol') || keyB.includes('eol') || keyA.includes('IN') || keyB.includes('IN')) {
       return { type: 'volts', value: '0.5 mA', note: 'EOL supervision current' };
     }
-
     return { type: 'ohms', value: 'OL', note: 'Open circuit' };
-  },
-
-  onPointerMove(e) {
-    if (this.selectedTerminal) this.draw();
   },
 
   draw() {
@@ -167,6 +178,48 @@ const Wiring = {
     ctx.save();
     ctx.translate(this.offsetX, this.offsetY);
     ctx.scale(this.scale, this.scale);
+
+    for (const dev of this.devices) {
+      ctx.fillStyle = '#1a1028';
+      ctx.fillRect(dev.x, dev.y, dev.width, dev.height);
+      ctx.strokeStyle = '#4a2a7a';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(dev.x, dev.y, dev.width, dev.height);
+      ctx.fillStyle = '#38E1F5';
+      ctx.font = 'bold 9px system-ui';
+      ctx.fillText(dev.type.replace('_', ' ').toUpperCase(), dev.x + 6, dev.y + 14);
+
+      for (const t of dev.terminals) {
+        const tx = dev.x + t.x;
+        const ty = dev.y + t.y;
+        const isSelected = this.selectedTerminal &&
+          this.selectedTerminal.device === dev.id &&
+          this.selectedTerminal.terminal === t.id;
+
+        ctx.fillStyle = '#2a2a2a';
+        ctx.beginPath();
+        ctx.arc(tx, ty, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#888';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(tx - 4, ty);
+        ctx.lineTo(tx + 4, ty);
+        ctx.stroke();
+        if (isSelected) {
+          ctx.strokeStyle = '#38E1F5';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(tx, ty, 10, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 7px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText(t.label, tx, ty + 18);
+        ctx.textAlign = 'left';
+      }
+    }
 
     ctx.lineWidth = 3;
     for (const w of this.wires) {
@@ -183,53 +236,8 @@ const Wiring = {
       }
     }
 
-    for (const dev of this.devices) {
-      ctx.fillStyle = '#1e1035';
-      ctx.fillRect(dev.x, dev.y, dev.width, dev.height);
-      ctx.fillStyle = '#2a1848';
-      ctx.fillRect(dev.x + 2, dev.y + 2, dev.width - 4, dev.height - 4);
-      ctx.strokeStyle = '#4a2a7a';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(dev.x, dev.y, dev.width, dev.height);
-
-      ctx.fillStyle = '#140A26';
-      ctx.fillRect(dev.x + 6, dev.y + 4, 100, 16);
-      ctx.fillStyle = '#38E1F5';
-      ctx.font = 'bold 9px system-ui';
-      ctx.fillText(dev.type.replace('_', ' ').toUpperCase(), dev.x + 8, dev.y + 15);
-
-      for (const t of dev.terminals) {
-        const tx = dev.x + t.x;
-        const ty = dev.y + t.y;
-        const isSelected = this.selectedTerminal &&
-          this.selectedTerminal.device === dev.id &&
-          this.selectedTerminal.terminal === t.id;
-
-        ctx.fillStyle = '#0a0518';
-        ctx.beginPath();
-        ctx.arc(tx, ty, 10, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = isSelected ? '#38E1F5' : '#D8B4FE';
-        ctx.beginPath();
-        ctx.arc(tx, ty, 7, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = isSelected ? '#ffffff' : '#f0e6ff';
-        ctx.beginPath();
-        ctx.arc(tx - 1, ty - 1, 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = 'bold 7px system-ui';
-        ctx.textAlign = 'center';
-        ctx.fillText(t.label, tx, ty + 18);
-        ctx.textAlign = 'left';
-      }
-    }
-
     if (this.lastReading) {
-      ctx.fillStyle = 'rgba(20,10,38,0.85)';
+      ctx.fillStyle = 'rgba(20,10,38,0.9)';
       ctx.fillRect(10, 10, 220, 50);
       ctx.fillStyle = '#38E1F5';
       ctx.font = 'bold 14px system-ui';
