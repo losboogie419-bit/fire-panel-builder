@@ -6,50 +6,29 @@
   <title>Fake It Till You Make It</title>
   <link rel="manifest" href="manifest.json">
   <style>
-    :root {
-      --bg: #140A26;
-      --card: #24143F;
-      --selected: #3B1F66;
-      --accent: #38E1F5;
-      --text: #FFFFFF;
-      --label: #D8B4FE;
-      --muted: #7A6A99;
-    }
-    body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; touch-action: none; height: 100%; }
-    html, body { height: 100%; }
-    #app { display: flex; flex-direction: column; height: 100%; min-height: 100vh; }
-    header { background: var(--card); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-    #canvas-wrap { flex: 1; position: relative; overflow: hidden; min-height: 300px; }
-    canvas { display: block; background: #1a0e30; width: 100%; height: 100%; touch-action: none; }
-    button { background: var(--accent); color: #140A26; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; min-height: 44px; margin: 4px; }
-    button.secondary { background: var(--muted); color: white; }
-    #status { font-size: 14px; color: var(--label); }
-    #credits { color: var(--accent); font-weight: bold; }
-    #info { background: var(--card); padding: 8px; font-size: 13px; color: var(--label); max-height: 80px; overflow: auto; }
-    #store-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; }
-    #store-box { background: var(--card); margin: 40px auto; padding: 16px; max-width: 360px; border-radius: 12px; }
+    body { margin:0; background:#0d0618; color:#fff; font-family:system-ui,sans-serif; overflow:hidden; touch-action:none; }
+    #game { display:block; width:100vw; height:100vh; }
+    #hud { position:absolute; top:8px; left:8px; right:8px; display:flex; justify-content:space-between; font-size:14px; background:rgba(20,10,38,0.85); padding:6px 10px; border-radius:8px; }
+    #info { position:absolute; bottom:70px; left:8px; right:8px; background:rgba(20,10,38,0.9); padding:8px; border-radius:8px; font-size:13px; max-height:80px; overflow:auto; }
+    #controls { position:absolute; bottom:8px; left:0; right:0; display:flex; justify-content:center; gap:8px; }
+    button { background:#38E1F5; color:#140A26; border:none; padding:12px 18px; border-radius:8px; font-weight:bold; min-width:64px; }
+    button.secondary { background:#7A6A99; color:#fff; }
+    #store-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:10; }
+    #store-box { background:#24143F; margin:30px auto; padding:16px; max-width:340px; border-radius:12px; }
   </style>
 </head>
 <body>
-  <div id="app">
-    <header>
-      <div id="status">Fake It Till You Make It<br><small style="color:#D8B4FE;">Fire Alarm Panel Builder</small></div>
-      <div>Stress: <span id="stress">0</span> | Credits: <span id="credits">0</span></div>
-    </header>
-    <div id="info">Select a level to see the objective.</div>
-    <div id="canvas-wrap">
-      <canvas id="game"></canvas>
-      <canvas id="map" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
-    </div>
-    <div id="ui" style="padding: 8px; background: var(--card); display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
-      <button id="btn-wire">Wire</button>
-      <button id="btn-meter">Meter</button>
-      <button id="btn-color" style="background:#c8102e; color:white;">Red</button>
-      <button id="btn-clear" class="secondary">Clear</button>
-      <button id="btn-test">Test</button>
-      <button id="btn-floors" class="secondary">Floors</button>
-      <button id="btn-store" class="secondary">KLONE Store</button>
-    </div>
+  <canvas id="game"></canvas>
+  <div id="hud">
+    <div>Stress: <span id="stress">0</span></div>
+    <div>Credits: <span id="credits">0</span></div>
+  </div>
+  <div id="info">Walk to a panel and press Interact.</div>
+  <div id="controls">
+    <button id="btn-left">←</button>
+    <button id="btn-right">→</button>
+    <button id="btn-interact">Interact</button>
+    <button id="btn-store" class="secondary">Store</button>
   </div>
   <div id="store-modal">
     <div id="store-box">
@@ -58,16 +37,9 @@
       <button id="store-close" class="secondary">Close</button>
     </div>
   </div>
-  <script src="js/progress.js"></script>
-  <script src="js/simulation.js"></script>
-  <script src="js/wiring.js"></script>
-  <script src="js/floorMap.js"></script>
-  <script src="js/store.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/game.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./service-worker.js');
-    }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js');
   </script>
 </body>
 </html>
