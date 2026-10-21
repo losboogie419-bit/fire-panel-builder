@@ -8,13 +8,13 @@
   <style>
     body { margin:0; background:#0d0618; color:#fff; font-family:system-ui,sans-serif; overflow:hidden; touch-action:none; }
     #game { display:block; width:100vw; height:100vh; }
-    #hud { position:absolute; top:8px; left:8px; right:8px; display:flex; justify-content:space-between; font-size:14px; background:rgba(20,10,38,0.85); padding:6px 10px; border-radius:8px; }
-    #info { position:absolute; bottom:70px; left:8px; right:8px; background:rgba(20,10,38,0.9); padding:8px; border-radius:8px; font-size:13px; max-height:80px; overflow:auto; }
-    #controls { position:absolute; bottom:8px; left:0; right:0; display:flex; justify-content:center; gap:8px; }
-    button { background:#38E1F5; color:#140A26; border:none; padding:12px 18px; border-radius:8px; font-weight:bold; min-width:64px; }
+    #hud { position:absolute; top:8px; left:8px; right:8px; display:flex; justify-content:space-between; font-size:14px; background:rgba(20,10,38,0.85); padding:6px 10px; border-radius:8px; z-index:5; }
+    #info { position:absolute; bottom:60px; left:8px; right:8px; background:rgba(20,10,38,0.9); padding:8px; border-radius:8px; font-size:13px; max-height:70px; overflow:auto; z-index:5; }
+    #controls { position:absolute; bottom:8px; left:0; right:0; display:flex; justify-content:center; gap:8px; z-index:5; }
+    button { background:#38E1F5; color:#140A26; border:none; padding:12px 16px; border-radius:8px; font-weight:bold; min-width:60px; }
     button.secondary { background:#7A6A99; color:#fff; }
-    #store-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:10; }
-    #store-box { background:#24143F; margin:30px auto; padding:16px; max-width:340px; border-radius:12px; }
+    #store-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:20; }
+    #store-box { background:#24143F; margin:40px auto; padding:16px; max-width:320px; border-radius:12px; }
   </style>
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div>Stress: <span id="stress">0</span></div>
     <div>Credits: <span id="credits">0</span></div>
   </div>
-  <div id="info">Walk to a panel and press Interact.</div>
+  <div id="info">Walk to a level door (L1 L2 L3) and Interact.</div>
   <div id="controls">
     <button id="btn-left">←</button>
     <button id="btn-right">→</button>
